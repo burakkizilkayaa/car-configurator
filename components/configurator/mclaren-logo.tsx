@@ -2,58 +2,74 @@ import React from 'react';
 
 interface McLarenLogoProps {
   className?: string;
+  /** Width in px — height is calculated from aspect ratio */
   size?: number;
+  /** Wordmark colour (default white for dark backgrounds) */
+  color?: string;
+  /** Hide the orange speedmark — show wordmark only */
   textOnly?: boolean;
 }
 
-/* McLaren diamond speedmark + wordmark */
-const McLarenLogo: React.FC<McLarenLogoProps> = ({ className = '', size = 44, textOnly = false }) => {
-  const h = size * 0.52;
+/**
+ * Faithful recreation of the McLaren logo:
+ *  - Italic bold "McLaren" wordmark (Barlow Condensed Bold Italic)
+ *  - Orange curved speedmark swoosh positioned above the 'n'
+ *
+ * viewBox 0 0 310 88
+ * The speedmark is traced as two bezier curves forming the wing shape.
+ */
+const McLarenLogo: React.FC<McLarenLogoProps> = ({
+  className = '',
+  size = 160,
+  color = '#ffffff',
+  textOnly = false,
+}) => {
+  /* Aspect ratio of the full logo is ~310:88 ≈ 3.52 */
+  const w = size;
+  const h = Math.round(size / 3.52);
+
   return (
     <svg
-      width={size}
+      width={w}
       height={h}
-      viewBox="0 0 120 62"
+      viewBox="0 0 310 88"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       aria-label="McLaren"
     >
-      {/* Speedmark — tapered diamond/pennant shape */}
+      {/* ── Orange speedmark swoosh ────────────────────────────────
+          Outer arc: left anchor → sweeps up-right → tip at far right
+          Inner arc: tip → tighter sweep back to left anchor
+          This recreates the characteristic McLaren "speed mark".
+      ─────────────────────────────────────────────────────────── */}
       {!textOnly && (
-        <>
-          {/* left wing */}
-          <path
-            d="M0 31 L18 10 L36 31 L18 52 Z"
-            fill="white"
-            opacity="0.9"
-          />
-          {/* right wing — narrower, pointing right */}
-          <path
-            d="M28 31 L46 14 L120 31 L46 48 Z"
-            fill="white"
-            opacity="0.9"
-          />
-          {/* inner cutout to create hollow speedmark */}
-          <path
-            d="M18 22 L28 31 L18 40 L10 31 Z"
-            fill="#0d0d0d"
-          />
-        </>
+        <path
+          d={[
+            'M 196 60',                        /* left anchor — narrow tip */
+            'C 220 28, 272 4, 307 3',          /* outer sweep up-right */
+            'C 302 22, 274 36, 204 63',        /* inner sweep back-left */
+            'Z',
+          ].join(' ')}
+          fill="#FF8000"
+        />
       )}
-      {/* Wordmark */}
+
+      {/* ── McLaren wordmark ──────────────────────────────────────
+          Barlow Condensed 800 Italic is visually close to the
+          custom McLaren typeface (condensed, angled, bold).
+      ─────────────────────────────────────────────────────────── */}
       <text
-        x={textOnly ? 60 : 70}
-        y="36"
-        textAnchor={textOnly ? 'middle' : 'start'}
-        fill="white"
-        fontFamily="Bebas Neue, Barlow Condensed, sans-serif"
-        fontSize={textOnly ? '28' : '20'}
-        letterSpacing={textOnly ? '5' : '3.5'}
-        dominantBaseline="middle"
-        opacity="0.92"
+        x="2"
+        y="80"
+        fill={color}
+        fontFamily="'Barlow Condensed', 'Barlow', sans-serif"
+        fontSize="76"
+        fontWeight="800"
+        fontStyle="italic"
+        letterSpacing="-1"
       >
-        McLAREN
+        McLaren
       </text>
     </svg>
   );

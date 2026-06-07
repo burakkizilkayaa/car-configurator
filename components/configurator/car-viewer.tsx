@@ -75,7 +75,7 @@ const CarViewer: React.FC<CarViewerProps> = ({
         (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(255,255,255,0.1)';
       }}
     >
-      <McLarenLogo size={32} />
+      <McLarenLogo size={120} />
       <span style={{ fontSize: 13, fontWeight: 500, color: 'rgba(255,255,255,0.72)', letterSpacing: '0.02em' }}>
         Change Model
       </span>

@@ -40,7 +40,7 @@ const IntroScreen: React.FC<IntroScreenProps> = ({ model, onConfigure }) => {
       {/* Header */}
       <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-7 pt-6 anim-up">
         <div style={{ width: 44 }} />
-        <McLarenLogo size={54} textOnly />
+        <McLarenLogo size={190} textOnly />
         <button className="ctrl-btn"><MoreHorizontal size={17} /></button>
       </div>
 
